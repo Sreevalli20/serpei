@@ -1,0 +1,55 @@
+# Proofline Render Deployment Configuration
+# SerpApi India Hackathon 2026
+#
+# This configuration deploys a single web service that serves both:
+# - The React frontend (static files from /dist)
+# - The Python FastAPI backend (API endpoints at /api/*)
+#
+# Architecture:
+# - Single web service (Python 3.14 / 3.12 compatible)
+# - Build process: npm install frontend deps -> npm run build -> pip install backend deps
+# - Backend serves frontend static files from /dist
+# - Backend API endpoints at /api/*
+# - SerpApi integration via SERPAPI_API_KEY environment variable
+#
+# Resource Constraints:
+# - Free tier: 512 MB RAM
+# - Cold starts: ~30-60 seconds for first request
+# - Ephemeral storage: data lost on restart
+# - No persistent database (in-memory cache only)
+
+services:
+  - type: web
+    name: proofline
+    env: python
+    plan: free
+    region: oregon
+    
+    # Python runtime configuration
+    # Render supports Python 3.14.3 and later (default for services created 2026-02-11+)
+    runtime: "3.14"
+    
+    # Build command: install frontend deps, build frontend, install backend deps
+    buildCommand: |
+      npm install && npm run build && cd backend && pip install -r requirements.txt
+    
+    # Start command: run FastAPI from backend directory
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    
+    # Health check
+    healthCheckPath: /api/health
+    
+    # Environment variables
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: PYTHON_VERSION
+        value: "3.14.6"
+      - key: APP_ENV
+        value: production
+      # SERPAPI_API_KEY must be set in Render dashboard as a secret environment variable
+      # SEARCH_TIMEOUT_SECONDS: optional, defaults to 30
+      # MAX_SEARCHES_PER_INVESTIGATION: optional, defaults to 5
+    
+    # Auto-deploy on push to main branch
+    branch: main

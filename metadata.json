@@ -1,0 +1,6 @@
+{
+  "name": "Proofline",
+  "description": "Professional evidence-investigation platform distinguishing search observations from analysis using SerpApi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
