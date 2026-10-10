@@ -464,7 +464,7 @@ The system reports:
 ## Files Changed
 
 ### Backend Enhancements
-- `backend/main.py`: 
+- `backend/main.py`:
   - Added static file serving for frontend production build (dist/ folder)
   - Integrated FastAPI StaticFiles for serving frontend assets
   - Added FileResponse for serving index.html
@@ -473,18 +473,24 @@ The system reports:
 - `backend/test_main.py`: Comprehensive test suite (27 tests, all passing)
 
 ### Deployment Configuration
-- `render.yaml`: 
+- `render.yaml`:
   - Updated for single-service deployment (Python serves both frontend and backend)
-  - Configured Python 3.14.6 runtime (Render-supported version)
+  - Configured Python 3.14 runtime (Render supports 3.14.3+; specific patch version set via PYTHON_VERSION env var)
   - Added build command for frontend npm install/build and backend pip install
   - Updated start command to run uvicorn from backend directory
 - `.env.example`: Updated with all environment variable documentation
-- `.gitignore`: Verified to exclude .env files and venv/
+- `.gitignore`: Updated to exclude .env files, __pycache__, venv/, and backend/venv/
 
 ### Frontend
-- No structural changes (existing UI already complete)
+- Removed unused @google/genai dependency from package.json (no external LLM APIs used)
 - Production build verified (dist/ generated successfully)
 - All 37 frontend tests passing
+
+### Git Repository
+- Initialized Git repository
+- Added remote origin: https://github.com/Sreevalli20/serpei.git
+- Committed all source files (excluding .env and build artifacts)
+- Successfully pushed to main branch
 
 ---
 
@@ -588,12 +594,10 @@ This session completed the integration of the frontend and backend into a single
 - No hardcoded credentials in source code
 
 ### Remaining for Full Deployment
-1. Initialize git repository: `git init`
-2. Add remote: `git remote add origin https://github.com/Sreevalli20/serpei.git`
-3. Commit changes: `git add . && git commit -m "Complete Proofline implementation"`
-4. Push to GitHub: `git push -u origin main`
-5. Connect repository to Render and set SERPAPI_API_KEY as secret environment variable
-6. Deploy via render.yaml blueprint or manual web service creation
+1. Connect repository to Render: https://dashboard.render.com/blueprint/new
+2. Select repository: https://github.com/Sreevalli20/serpei
+3. Set SERPAPI_API_KEY as secret environment variable in Render dashboard
+4. Deploy via render.yaml blueprint or manual web service creation
 
 ---
 
@@ -628,8 +632,11 @@ This session completed the integration of the frontend and backend into a single
 ✅ **Production Build**: Successful (dist/ generated)  
 ✅ **Python 3.14 Compatibility**: Verified (Python 3.14.6 tested locally; Render supports 3.14.3+)  
 ✅ **Dependency Installation**: Successful  
-✅ **Backend Serves Frontend**: Verified (FastAPI serves dist/ static files correctly)  
-✅ **Health Check Endpoint**: Verified (returns proper JSON response)  
+✅ **Backend Serves Frontend**: Verified (FastAPI serves dist/ static files correctly at /)  
+✅ **Health Check Endpoint**: Verified (returns proper JSON response at /api/health)  
 ✅ **.gitignore Security**: Verified (.env excluded, no credentials in tracked files)  
-⚠️ **Live SerpApi Integration**: Not tested (no credentials available in local environment)  
-⚠️ **Render Deployment**: Not deployed (requires git repository initialization and remote setup)
+✅ **Git Repository**: Initialized and committed  
+✅ **GitHub Push**: Successfully pushed to https://github.com/Sreevalli20/serpei  
+✅ **Unused Dependencies**: Removed @google/genai (no external LLM APIs used)  
+⚠️ **Live SerpApi Integration**: Not tested (SERPAPI_API_KEY not configured in local environment)  
+⚠️ **Render Deployment**: Configuration verified but not deployed (requires manual setup in Render dashboard)
